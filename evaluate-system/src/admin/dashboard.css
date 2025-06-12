@@ -1,0 +1,308 @@
+/* พื้นฐาน */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f7f7f7;
+  color: #222;
+  padding: 0;
+  width: 100%;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* โหลด */
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.loading.hidden {
+  display: none;
+}
+
+.spinner {
+  border: 6px solid #ccc;
+  border-top: 6px solid #333;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Logout */
+.logout-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.logout-btn {
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #111;
+}
+
+/* หัวเรื่อง */
+.dashboard-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* กล่องข้อความผิดพลาด */
+.error-message {
+  color: red;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ส่วนบน */
+.top-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+/* แบบฟอร์มเพิ่มผู้ใช้ */
+.add-user-section {
+  flex: 1;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #333;
+  outline: none;
+}
+
+button[type="submit"] {
+  background-color: #222;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background-color: #111;
+}
+
+/* ลิงก์และการตั้งค่า Sheet */
+.page-sheet-section {
+  flex: 1;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+}
+
+.pageLink-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pageLink-container button {
+  flex: 1;
+  background-color: #333;
+  color: white;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pageLink-container button:hover {
+  background-color: #000;
+}
+
+.database-container input {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* ตารางผู้ใช้ */
+.table-section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+}
+
+.table-container h4 {
+  margin-bottom: 1rem;
+}
+
+#userTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#userTable th,
+#userTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+#userTable th {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.edit-btn {
+  background-color: #555;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #333;
+}
+
+.delete-btn {
+  background-color: #999;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #666;
+}
+
+/* Modal แก้ไขผู้ใช้ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 30, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.save-btn {
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #111;
+}
+
+.cancel-btn {
+  background-color: #aaa;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #888;
+}

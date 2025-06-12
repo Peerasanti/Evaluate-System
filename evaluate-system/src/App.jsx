@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import axios from 'axios'
 import './App.css'
 
 function App() {
@@ -31,29 +31,33 @@ function App() {
       });
       console.log('Response:', res.data);
 
-      if (!response.data.success || !response.data.user) {
-        setMessage(response.data.error || 'ไม่พบชื่อผู้ใช้นี้');
+      if (!res.data.result || !res.data.user) {
+        setMessage(res.data.error || 'ไม่พบชื่อผู้ใช้นี้');
+        setLoading(false);
         return;
       }
 
-      const { username: dataUsername, password: dataPassword, role } = response.data.user;
+      const { username: dataUsername, password: dataPassword, role } = res.data.user;
       const normalizedDataPassword = String(dataPassword || '').trim();
       const normalizedPassword = String(password || '').trim();
 
       if (normalizedDataPassword !== normalizedPassword) {
         setMessage('รหัสผ่านไม่ถูกต้อง');
+        setLoading(false);
         return;
       }
 
       if (!['admin', 'user'].includes(role)) {
         setMessage('สิทธิที่มีไม่ถูกต้อง');
+        setLoading(false);
         return;
       }
 
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('authenticatedUser', dataUsername);
       localStorage.setItem('authenticatedRole', role);
-      setMessage('Login สำเร็จ!');
+      setMessage('ล็อกอินสำเร็จ!');
+      setLoading(false);
 
       if (role === 'admin') {
         navigate('/admin/dashboard');
@@ -61,7 +65,7 @@ function App() {
         navigate('/user/userDashboard');
       }
     } catch (error) {
-      setMessage('Error: ไม่สามารถเชื่อมต่อกับเซิฟเวอร์ได้');
+      setMessage('ไม่สามารถเชื่อมต่อกับเซิฟเวอร์ได้');
       console.error('Login error:', error);
     }
   };
@@ -84,7 +88,7 @@ function App() {
                   type="text"
                   className="form-control"
                   id="username"
-                  placeholder="Username"
+                  placeholder="ชื่อผู้ใช้"
                   name="username"
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -95,7 +99,7 @@ function App() {
                   type="password"
                   className="form-control"
                   id="password"
-                  placeholder="Password"
+                  placeholder="รหัสผ่าน"
                   name="password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
