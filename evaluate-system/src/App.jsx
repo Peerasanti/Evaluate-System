@@ -62,7 +62,7 @@ function App() {
       if (role === 'admin') {
         navigate('/admin/dashboard');
       } else if (role === 'user') {
-        navigate('/user/userDashboard');
+        navigate('/user/evaluate');
       }
     } catch (error) {
       setMessage('ไม่สามารถเชื่อมต่อกับเซิฟเวอร์ได้');

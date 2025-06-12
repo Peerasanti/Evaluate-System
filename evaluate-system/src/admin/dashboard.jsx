@@ -13,6 +13,7 @@ function Dashboard() {
   const [currentUser, setCurrentUser] = useState({ username: '', password: '', role: '' });
   const [editModalOpen, setEditModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [sheetId, setSheetId] = useState('');
 
   useEffect(() => {
     const role = localStorage.getItem('authenticatedRole');
@@ -60,9 +61,10 @@ function Dashboard() {
       });
       const res = await axios.post('/api', formData, {
         headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
+      console.log(res.data);
       if (res.data.result === 'success') {
         setUsername('');
         setPassword('');
@@ -89,7 +91,7 @@ function Dashboard() {
     const authenticatedRole = localStorage.getItem('authenticatedRole');
     const authenticatedUser = localStorage.getItem('authenticatedUser');
     if (authenticatedRole === 'admin' && user.role === 'admin' && user.username !== authenticatedUser) {
-      setError('ไม่สามารถแก้ไขผู้ใช้ admin อื่นได้');
+      setError('ไม่สามารถแก้ไข admin คนอื่นได้');
       return;
     }
     setCurrentUser(user);
@@ -126,10 +128,17 @@ function Dashboard() {
     }
   };
 
-  const handleDeleteUser = async (username) => {
+  const handleDeleteUser = async (user) => {
+    const authenticatedRole = localStorage.getItem('authenticatedRole');
+    const authenticatedUser = localStorage.getItem('authenticatedUser');
+    if (authenticatedRole === 'admin' && user.role === 'admin' && user.username !== authenticatedUser) {
+      setError('ไม่สามารถลบ admin คนอื่นได้');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
+      const username = user.username;
       const formData = new URLSearchParams({
         action: 'deleteUser',
         username
@@ -150,6 +159,38 @@ function Dashboard() {
       setLoading(false);
     }
   };
+
+  const handleSheetIdChange = async (e) => {
+    if (!sheetId) {
+        setError('กรุณากรอก Google Sheet ID');
+        return;
+    }
+    console.log(sheetId)
+    try {
+      const formData = new URLSearchParams({
+        action: 'setSheetId',
+        sheetId: sheetId
+      });
+      const res = await axios.post('/api', formData, {
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          }
+      });
+      console.log(res.data);
+      if (res.data.result === 'success') {
+        setError('');
+        setSheetId('');
+        console.log("ตั้งค่า Google Sheet ID สําเร็จ");
+      } else {
+        setError(res.data.message || 'เกิดข้อผิดพลาดในการตั้งค่า Google Sheet ID');
+        console.log("ตั้งค่า Google Sheet ID ไม่สําเร็จ");
+      }
+    } catch (err) {
+      setError('เกิดข้อผิดพลาดในการตั้งค่า Google Sheet ID');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const closeEditModal = () => {
     setEditModalOpen(false);
@@ -217,8 +258,8 @@ function Dashboard() {
         </div>
         <div className="page-sheet-section">
           <div className="pageLink-container">
-            <button onClick={() => navigate('/assessment')}>รายการประเมินทั้งหมด</button>
-            <button onClick={() => navigate('/overview')}>ภาพรวมของคะแนน</button>
+            <button onClick={() => navigate('/admin/assessment')}>รายการประเมินทั้งหมด</button>
+            <button onClick={() => navigate('/admin/overview')}>ภาพรวมของคะแนน</button>
           </div>
           <div className="database-container">
             <h4>เปลี่ยน Google Sheet</h4>
@@ -227,8 +268,11 @@ function Dashboard() {
               id="sheetId"
               name="sheetId"
               placeholder="กรอกไอดีของ Google Sheet"
+              value={sheetId}
+              onChange={(e) => setSheetId(e.target.value)}
               required
             />
+            <button onClick={handleSheetIdChange}>บันทึก</button>
           </div>
         </div>
       </div>
@@ -262,7 +306,7 @@ function Dashboard() {
                     </button>
                     <button
                       className="delete-btn"
-                      onClick={() => handleDeleteUser(user.username)}
+                      onClick={() => handleDeleteUser(user)}
                     >
                       ลบ
                     </button>
