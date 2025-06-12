@@ -154,11 +154,8 @@ function Assessment() {
             {error && <div className="error-message">{error}</div>}
 
             <div className="logout-container">
-                <button className="logout-btn" onClick={handleLogout}>Logout</button>
-            </div>
-
-            <div className="back-container">
                 <button className="back-btn" onClick={() => navigate('/admin/dashboard')}>Back</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
 
             <h1>รายการประเมินทั้งหมด</h1>
