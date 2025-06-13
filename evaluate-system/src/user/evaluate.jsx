@@ -257,6 +257,7 @@ function Evaluate() {
                     </div>
                 </div>
 
+                <h4>ช่องกรอกคะแนน :</h4>
                 <div className="form-row score-row">
                     {[score_1, score_2, score_3, score_4, score_5].map((score, index) => (
                         <div className="form-group" key={index}>
