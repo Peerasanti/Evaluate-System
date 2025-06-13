@@ -164,7 +164,7 @@ function Assessment() {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close-btn" onClick={closeModal}>×</span>
-                        <h2>แก้ไขการประเมิน</h2>
+                        <h3>แก้ไขการประเมิน</h3>
                         <form id="edit-assessment-form" onSubmit={handleUpdateAssessment}>
                             <div className="form-row">
                                 <div className="form-group">

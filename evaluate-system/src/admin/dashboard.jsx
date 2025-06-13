@@ -11,6 +11,7 @@ function Dashboard() {
   const [role, setRole] = useState('user');
   const [error, setError] = useState('');
   const [currentUser, setCurrentUser] = useState({ username: '', password: '', role: '' });
+  const [originalUsername, setOriginalUsername] = useState(''); 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const [sheetId, setSheetId] = useState('');
@@ -28,25 +29,25 @@ function Dashboard() {
   }, []);
 
   const fetchUsers = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const res = await axios.get('/api', {
-          params: { action: 'getUsers' }
-        });
-        if (res.data.result === 'success' && res.data.users) {
-          setAllUsers(res.data.users);
-        } else {
-          setError('โหลดข้อมูลผู้ใช้ไม่สําเร็จ');
-          setAllUsers([]);
-        }
-      } catch (err) {
-        setError('โหลดข้อมูลผู้ใช้ไม่ได้');
+    setLoading(true);
+    setError('');
+    try {
+      const res = await axios.get('/api', {
+        params: { action: 'getUsers' }
+      });
+      if (res.data.result === 'success' && res.data.users) {
+        setAllUsers(res.data.users);
+      } else {
+        setError('โหลดข้อมูลผู้ใช้ไม่สําเร็จ');
         setAllUsers([]);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch {
+      setError('โหลดข้อมูลผู้ใช้ไม่ได้');
+      setAllUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -60,11 +61,8 @@ function Dashboard() {
         Role: role
       });
       const res = await axios.post('/api', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
-      console.log(res.data);
       if (res.data.result === 'success') {
         setUsername('');
         setPassword('');
@@ -73,7 +71,7 @@ function Dashboard() {
       } else {
         setError(res.data.message || 'เพิ่มผู้ใช้ไม่สำเร็จ');
       }
-    } catch (err) {
+    } catch {
       setError('เพิ่มผู้ใช้ไม่สำเร็จ');
     } finally {
       setLoading(false);
@@ -94,7 +92,8 @@ function Dashboard() {
       setError('ไม่สามารถแก้ไข admin คนอื่นได้');
       return;
     }
-    setCurrentUser(user);
+    setCurrentUser({ ...user });
+    setOriginalUsername(user.username); 
     setEditModalOpen(true);
   };
 
@@ -105,15 +104,13 @@ function Dashboard() {
     try {
       const formData = new URLSearchParams({
         action: 'editUser',
-        oldUsername: currentUser.username,
-        Username: currentUser.username,
+        oldUsername: originalUsername, 
+        Username: currentUser.username, 
         Password: currentUser.password,
         Role: currentUser.role
       });
       const res = await axios.post('/api', formData, {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
         closeEditModal();
@@ -121,7 +118,7 @@ function Dashboard() {
       } else {
         setError(res.data.message || 'แก้ไขผู้ใช้ไม่สำเร็จ');
       }
-    } catch (err) {
+    } catch {
       setError('แก้ไขผู้ใช้ไม่สำเร็จ');
     } finally {
       setLoading(false);
@@ -138,63 +135,56 @@ function Dashboard() {
     setLoading(true);
     setError('');
     try {
-      const username = user.username;
       const formData = new URLSearchParams({
         action: 'deleteUser',
-        username
+        username: user.username
       });
       const res = await axios.post('/api', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
       if (res.data.result === 'success') {
         fetchUsers();
       } else {
         setError(res.data.message || 'ลบผู้ใช้ไม่สำเร็จ');
       }
-    } catch (err) {
+    } catch {
       setError('ลบผู้ใช้ไม่สำเร็จ');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSheetIdChange = async (e) => {
+  const handleSheetIdChange = async () => {
     if (!sheetId) {
-        setError('กรุณากรอก Google Sheet ID');
-        return;
+      setError('กรุณากรอก Google Sheet ID');
+      return;
     }
-    console.log(sheetId)
+    setLoading(true);
     try {
       const formData = new URLSearchParams({
         action: 'setSheetId',
-        sheetId: sheetId
+        sheetId
       });
       const res = await axios.post('/api', formData, {
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-          }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
-      console.log(res.data);
       if (res.data.result === 'success') {
         setError('');
         setSheetId('');
-        console.log("ตั้งค่า Google Sheet ID สําเร็จ");
       } else {
         setError(res.data.message || 'เกิดข้อผิดพลาดในการตั้งค่า Google Sheet ID');
-        console.log("ตั้งค่า Google Sheet ID ไม่สําเร็จ");
       }
-    } catch (err) {
+    } catch {
       setError('เกิดข้อผิดพลาดในการตั้งค่า Google Sheet ID');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const closeEditModal = () => {
     setEditModalOpen(false);
-    setCurrentUser(null);
+    setCurrentUser({ username: '', password: '', role: '' });
+    setOriginalUsername(''); 
   };
 
   return (
@@ -321,15 +311,17 @@ function Dashboard() {
       {editModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
+            <span className="close-btn" onClick={closeEditModal}>×</span>
             <h3>แก้ไขผู้ใช้</h3>
             <form id="editForm" onSubmit={handleEditSubmit}>
               <div className="form-group">
                 <label htmlFor="editUsername">ชื่อผู้ใช้</label>
+                <label htmlFor="warningUsername">*หากเปลี่ยนชื่อผู้ใช้แล้วจะทำให้ข้อมูลการประเมินสูญหาย</label>
                 <input
                   type="text"
                   id="editUsername"
                   name="username"
-                  value={currentUser?.username || ''}
+                  value={currentUser.username}
                   onChange={(e) => setCurrentUser({ ...currentUser, username: e.target.value })}
                   required
                 />
@@ -340,7 +332,7 @@ function Dashboard() {
                   type="password"
                   id="editPassword"
                   name="password"
-                  value={currentUser?.password || ''}
+                  value={currentUser.password}
                   onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
                   required
                 />
@@ -350,7 +342,7 @@ function Dashboard() {
                 <select
                   id="editRole"
                   name="role"
-                  value={currentUser?.role || 'user'}
+                  value={currentUser.role}
                   onChange={(e) => setCurrentUser({ ...currentUser, role: e.target.value })}
                   required
                 >

@@ -78,12 +78,12 @@ h1 {
     border: 1px solid #e5e7eb;
     padding: 14px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;    
 }
 
 .overview-table th {
-    background-color: #0284c7;
-    color: white;
+    background-color: #f0f0f0;
+    color: #333;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -145,8 +145,8 @@ h1 {
 }
 
 .details-table th {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #f0f0f0;
+    color: #333;;
     font-weight: 600;
     text-transform: uppercase;
 }
