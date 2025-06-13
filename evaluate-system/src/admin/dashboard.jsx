@@ -32,7 +32,7 @@ function Dashboard() {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.get('/api', {
+      const res = await axios.get(`${import.meta.env.GAS_URL}`, {
         params: { action: 'getUsers' }
       });
       if (res.data.result === 'success' && res.data.users) {
@@ -60,7 +60,7 @@ function Dashboard() {
         Password: password,
         Role: role
       });
-      const res = await axios.post('/api', formData, {
+      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -109,7 +109,7 @@ function Dashboard() {
         Password: currentUser.password,
         Role: currentUser.role
       });
-      const res = await axios.post('/api', formData, {
+      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -139,7 +139,7 @@ function Dashboard() {
         action: 'deleteUser',
         username: user.username
       });
-      const res = await axios.post('/api', formData, {
+      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -165,7 +165,7 @@ function Dashboard() {
         action: 'setSheetId',
         sheetId
       });
-      const res = await axios.post('/api', formData, {
+      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {

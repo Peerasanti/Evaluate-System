@@ -23,7 +23,7 @@ function App() {
 
     try {
       const normalizedUsername = String(username || '').trim();
-      const res = await axios.get('/api' , {
+      const res = await axios.get(`${import.meta.env.GAS_URL}` , {
         params: {
           action: 'getUserByUsername',
           username: normalizedUsername,

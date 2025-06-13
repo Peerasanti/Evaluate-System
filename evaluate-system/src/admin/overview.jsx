@@ -27,7 +27,7 @@ function Overview() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.get('/api', {
+            const res = await axios.get(`${import.meta.env.GAS_URL}`, {
                 params: { action: 'getAssessments' }
             });
             if (res.data.result === 'success' && res.data.assessments) {

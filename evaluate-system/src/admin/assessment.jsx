@@ -36,7 +36,7 @@ function Assessment() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.get('/api', {
+            const res = await axios.get(`${import.meta.env.GAS_URL}`, {
                 params: { action: 'getAssessments' }
             });
             if (res.data.result === 'success' && res.data.assessments) {
@@ -82,7 +82,7 @@ function Assessment() {
                 Score4: score_4,
                 Score5: score_5
             });
-            const res = await axios.post('/api', formData, {
+            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {
@@ -115,7 +115,7 @@ function Assessment() {
                 AssessorUsername: assessment.AssessorUsername,
                 AssesseeName: assessment.AssesseeName
             });
-            const res = await axios.post('/api', formData, {
+            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {
