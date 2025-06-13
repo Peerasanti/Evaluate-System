@@ -223,6 +223,7 @@ function Evaluate() {
             {loading && <div className="loading"><div className="spinner"></div></div>}
 
             <div className="logout-container">
+                <h3>Hello, {currentUser}</h3>
                 <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
 

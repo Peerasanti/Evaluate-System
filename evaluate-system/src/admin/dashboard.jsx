@@ -15,6 +15,7 @@ function Dashboard() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const [sheetId, setSheetId] = useState('');
+  const authenticatedUser = localStorage.getItem('authenticatedUser');
   const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
 
   useEffect(() => {
@@ -195,6 +196,7 @@ function Dashboard() {
       </div>
 
       <div className="logout-container">
+        <h3>Hello, {authenticatedUser}</h3>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
 
