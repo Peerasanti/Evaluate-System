@@ -290,6 +290,7 @@ function Assessment() {
             <table className="table-section">
                 <thead>
                     <tr>
+                        <th>ลําดับ</th>
                         <th>ผู้ประเมิน</th>
                         <th>ผู้ถูกประเมิน</th>
                         <th>แผนก</th>
@@ -306,6 +307,7 @@ function Assessment() {
                 <tbody>
                     {allAssessments.map((assessment, index) => (
                         <tr key={index}>
+                            <td>{index + 1}</td>
                             <td>{assessment.AssessorUsername}</td>
                             <td>{assessment.AssesseeName}</td>
                             <td>{assessment.Department}</td>

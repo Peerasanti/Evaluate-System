@@ -277,7 +277,7 @@ function Dashboard() {
                 <th>ลำดับ</th>
                 <th>ชื่อผู้ใช้</th>
                 <th>รหัสผ่าน</th>
-                <th>บทบาท</th>
+                <th>สิทธิ</th>
                 <th>จัดการข้อมูล</th>
               </tr>
             </thead>

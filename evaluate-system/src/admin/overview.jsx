@@ -113,6 +113,7 @@ function Overview() {
             <table className="overview-table">
                 <thead>
                     <tr>
+                        <th>ลําดับ</th>
                         <th>ผู้ถูกประเมิน</th>
                         <th>แผนก</th>
                         <th>จำนวนผู้ประเมิน</th>
@@ -130,6 +131,7 @@ function Overview() {
                     {averagedAssessments.map((assessment, index) => (
                         <>
                             <tr key={index}>
+                                <td>{index + 1}</td>
                                 <td>{assessment.AssesseeName}</td>
                                 <td>{assessment.Department}</td>
                                 <td>{assessment.Count} คน</td>
@@ -156,6 +158,7 @@ function Overview() {
                                             <table className="details-table">
                                                 <thead>
                                                     <tr>
+                                                        <th>ลําดับ</th>
                                                         <th>ผู้ประเมิน</th>
                                                         <th>ตรงต่อเวลา</th>
                                                         <th>การทำงานร่วมกัน</th>
@@ -171,6 +174,7 @@ function Overview() {
                                                         .filter(a => a.AssesseeName === assessment.AssesseeName)
                                                         .map((detail, idx) => (
                                                             <tr key={idx}>
+                                                                <td>{idx + 1}</td>
                                                                 <td>{detail.AssessorUsername}</td>
                                                                 <td>{detail.Score1}</td>
                                                                 <td>{detail.Score2}</td>
