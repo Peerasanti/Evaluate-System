@@ -155,7 +155,7 @@ function Overview() {
                             </tr>
                             {openDropdown === assessment.AssesseeName && (
                                 <tr className="dropdown-row">
-                                    <td colSpan="11">
+                                    <td colSpan="13">
                                         <div className="dropdown-content">
                                             <table className="details-table">
                                                 <thead>
