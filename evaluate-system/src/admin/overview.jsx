@@ -51,10 +51,12 @@ function Overview() {
     const calculateAveragedAssessments = (assessments) => {
         const grouped = assessments.reduce((acc, assessment) => {
             const { AssesseeName, Department, Score1, Score2, Score3, Score4, Score5, TotalScore } = assessment;
-            if (!acc[AssesseeName]) {
-                acc[AssesseeName] = {
+            const normalizedName = AssesseeName.replace(/\s+/g, '')
+
+            if (!acc[normalizedName]) {
+                acc[normalizedName] = {
                     AssesseeName,
-                    Department,
+                    Department,   
                     Score1: [],
                     Score2: [],
                     Score3: [],
@@ -63,24 +65,24 @@ function Overview() {
                     TotalScore: []
                 };
             }
-            acc[AssesseeName].Score1.push(Number(Score1));
-            acc[AssesseeName].Score2.push(Number(Score2));
-            acc[AssesseeName].Score3.push(Number(Score3));
-            acc[AssesseeName].Score4.push(Number(Score4));
-            acc[AssesseeName].Score5.push(Number(Score5));
-            acc[AssesseeName].TotalScore.push(Number(TotalScore));
+            acc[normalizedName].Score1.push(Number(Score1));
+            acc[normalizedName].Score2.push(Number(Score2));
+            acc[normalizedName].Score3.push(Number(Score3));
+            acc[normalizedName].Score4.push(Number(Score4));
+            acc[normalizedName].Score5.push(Number(Score5));
+            acc[normalizedName].TotalScore.push(Number(TotalScore));
             return acc;
         }, {});
 
         const averaged = Object.values(grouped).map(group => ({
-            AssesseeName: group.AssesseeName,
+            AssesseeName: group.AssesseeName, 
             Department: group.Department,
-            Score1: (group.Score1.reduce((sum, score) => sum + score, 0)),
-            Score2: (group.Score2.reduce((sum, score) => sum + score, 0)),
-            Score3: (group.Score3.reduce((sum, score) => sum + score, 0)),
-            Score4: (group.Score4.reduce((sum, score) => sum + score, 0)),
-            Score5: (group.Score5.reduce((sum, score) => sum + score, 0)),
-            TotalScore: (group.TotalScore.reduce((sum, score) => sum + score, 0)),
+            Score1: group.Score1.reduce((sum, score) => sum + score, 0),
+            Score2: group.Score2.reduce((sum, score) => sum + score, 0),
+            Score3: group.Score3.reduce((sum, score) => sum + score, 0),
+            Score4: group.Score4.reduce((sum, score) => sum + score, 0),
+            Score5: group.Score5.reduce((sum, score) => sum + score, 0),
+            TotalScore: group.TotalScore.reduce((sum, score) => sum + score, 0),
             Count: group.Score1.length
         }));
 
