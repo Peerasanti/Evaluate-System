@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './App.css'
@@ -10,6 +10,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
 
   const handleConfigLogin = () => {
     alert('Config login clicked!');
@@ -23,7 +24,7 @@ function App() {
 
     try {
       const normalizedUsername = String(username || '').trim();
-      const res = await axios.get(`${import.meta.env.GAS_URL}` , {
+      const res = await axios.get(`${API_BASE_URL}` , {
         params: {
           action: 'getUserByUsername',
           username: normalizedUsername,

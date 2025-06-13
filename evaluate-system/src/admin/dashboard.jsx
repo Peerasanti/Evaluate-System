@@ -15,6 +15,7 @@ function Dashboard() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const [sheetId, setSheetId] = useState('');
+  const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
 
   useEffect(() => {
     const role = localStorage.getItem('authenticatedRole');
@@ -32,7 +33,7 @@ function Dashboard() {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.get(`${import.meta.env.GAS_URL}`, {
+      const res = await axios.get(`${API_BASE_URL}`, {
         params: { action: 'getUsers' }
       });
       if (res.data.result === 'success' && res.data.users) {
@@ -60,7 +61,7 @@ function Dashboard() {
         Password: password,
         Role: role
       });
-      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+      const res = await axios.post(`${API_BASE_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -109,7 +110,7 @@ function Dashboard() {
         Password: currentUser.password,
         Role: currentUser.role
       });
-      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+      const res = await axios.post(`${API_BASE_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -139,7 +140,7 @@ function Dashboard() {
         action: 'deleteUser',
         username: user.username
       });
-      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+      const res = await axios.post(`${API_BASE_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {
@@ -165,7 +166,7 @@ function Dashboard() {
         action: 'setSheetId',
         sheetId
       });
-      const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+      const res = await axios.post(`${API_BASE_URL}`, formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
       if (res.data.result === 'success') {

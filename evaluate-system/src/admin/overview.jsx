@@ -8,8 +8,9 @@ function Overview() {
     const [averagedAssessments, setAveragedAssessments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [openDropdown, setOpenDropdown] = useState(null); // Tracks which AssesseeName's dropdown is open
+    const [openDropdown, setOpenDropdown] = useState(null); 
     const navigate = useNavigate();
+    const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
 
     useEffect(() => {
         const role = localStorage.getItem('authenticatedRole');
@@ -27,7 +28,7 @@ function Overview() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.get(`${import.meta.env.GAS_URL}`, {
+            const res = await axios.get(`${API_BASE_URL}`, {
                 params: { action: 'getAssessments' }
             });
             if (res.data.result === 'success' && res.data.assessments) {

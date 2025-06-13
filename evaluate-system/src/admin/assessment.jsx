@@ -19,6 +19,7 @@ function Assessment() {
     const [score_4, setScore_4] = useState('');
     const [score_5, setScore_5] = useState('');
     const navigate = useNavigate();
+    const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
 
     useEffect(() => {
         const role = localStorage.getItem('authenticatedRole');
@@ -36,7 +37,7 @@ function Assessment() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.get(`${import.meta.env.GAS_URL}`, {
+            const res = await axios.get(`${API_BASE_URL}`, {
                 params: { action: 'getAssessments' }
             });
             if (res.data.result === 'success' && res.data.assessments) {
@@ -82,7 +83,7 @@ function Assessment() {
                 Score4: score_4,
                 Score5: score_5
             });
-            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+            const res = await axios.post(`${API_BASE_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {
@@ -115,7 +116,7 @@ function Assessment() {
                 AssessorUsername: assessment.AssessorUsername,
                 AssesseeName: assessment.AssesseeName
             });
-            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+            const res = await axios.post(`${API_BASE_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {

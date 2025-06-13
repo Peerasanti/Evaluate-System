@@ -20,6 +20,7 @@ function Evaluate() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editAssessment, setEditAssessment] = useState(null);
     const navigate = useNavigate();
+    const API_BASE_URL = import.meta.env.VITE_GAS_URL || '/api';
     
     useEffect(() => {
         if (!currentUser) {
@@ -47,7 +48,7 @@ function Evaluate() {
                 Score4: score_4,
                 Score5: score_5
             });
-            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+            const res = await axios.post(`${API_BASE_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {
@@ -69,7 +70,7 @@ function Evaluate() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.get(`${import.meta.env.GAS_URL}`, {
+            const res = await axios.get(`${API_BASE_URL}`, {
                 params: { action: 'getAssessments' }
             });
             if (res.data.result === 'success' && res.data.assessments) {
@@ -117,7 +118,7 @@ function Evaluate() {
                 Score4: score_4,
                 Score5: score_5
             });
-            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+            const res = await axios.post(`${API_BASE_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             console.log(res.data);
@@ -143,7 +144,7 @@ function Evaluate() {
                 AssessorUsername: assessment.AssessorUsername,
                 AssesseeName: assessment.AssesseeName
             });
-            const res = await axios.post(`${import.meta.env.GAS_URL}`, formData, {
+            const res = await axios.post(`${API_BASE_URL}`, formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             if (res.data.result === 'success') {
