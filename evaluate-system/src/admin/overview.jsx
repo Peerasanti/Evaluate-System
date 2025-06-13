@@ -173,7 +173,7 @@ function Overview() {
                                                 </thead>
                                                 <tbody>
                                                     {allAssessments
-                                                        .filter(a => a.AssesseeName === assessment.AssesseeName)
+                                                        .filter(a => a.AssesseeName.replace(/\s+/g, '') === assessment.AssesseeName.replace(/\s+/g, ''))
                                                         .map((detail, idx) => (
                                                             <tr key={idx}>
                                                                 <td>{idx + 1}</td>
