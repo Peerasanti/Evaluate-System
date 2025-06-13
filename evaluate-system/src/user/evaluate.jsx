@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './evaluate.css';
+import ExcelJS from 'exceljs';
+import Papa from 'papaparse';
 
 function Evaluate() {
     const currentUser = localStorage.getItem('authenticatedUser');
@@ -170,6 +172,51 @@ function Evaluate() {
         setError('');
     };
 
+    const ExportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Assessments');
+
+        worksheet.columns = [
+            { header: 'ผู้ถูกประเมิน', key: 'AssesseeName', width: 20 },
+            { header: 'แผนก', key: 'Department', width: 15 },
+            { header: 'ตรงต่อเวลา', key: 'Score1', width: 15 },
+            { header: 'การทำงานร่วมกัน', key: 'Score2', width: 20 },
+            { header: 'จำนวนงาน', key: 'Score3', width: 15 },
+            { header: 'คุณภาพงาน', key: 'Score4', width: 15 },
+            { header: 'อื่นๆ', key: 'Score5', width: 10 },
+            { header: 'คะแนนรวม', key: 'TotalScore', width: 15 },
+        ];
+
+        allAssessments.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Assessments.xlsx';
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
+
+    const ExportToCSV = () => {
+        const csv = Papa.unparse(allAssessments);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Assessments.csv';
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
     return (
         <div className='evaluate-container'>
             {loading && <div className="loading"><div className="spinner"></div></div>}
@@ -179,6 +226,10 @@ function Evaluate() {
             </div>
 
             <h1 className="evaluate-title">หน้าประเมินพนักงาน</h1>
+            <div className="export-btn">
+                <button className="export-excel submit-btn" onClick={(e) => ExportToExcel()}>Export to Excel</button>
+                <button className='export-csv submit-btn' onClick={(e) => ExportToCSV()}>Export to CSV</button>
+            </div>
 
             {error && <div className="error-message">{error}</div>}
 
@@ -303,7 +354,7 @@ function Evaluate() {
                             <td>{a.Score3}</td>
                             <td>{a.Score4}</td>
                             <td>{a.Score5}</td>
-                            <td>{a.TotalScore}</td>
+                            <td>{a.TotalScore}/50</td>
                             <td>
                                 <button
                                     className="edit-btn"

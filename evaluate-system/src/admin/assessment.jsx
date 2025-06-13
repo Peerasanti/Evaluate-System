@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './assessment.css';
+import ExcelJS from 'exceljs';
+import Papa from 'papaparse';
 
 function Assessment() {
     const [allAssessments, setAllAssessments] = useState([]);
@@ -148,17 +150,75 @@ function Assessment() {
         setError('');
     };
 
+    const ExportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('All Assessments');
+
+        const exportData = allAssessments.map(assessment => ({
+            ...assessment,
+            TotalScore: `${assessment.TotalScore}/50`,
+            PercentScore: ((assessment.TotalScore / 50) * 100) + '%'
+        }));
+
+        worksheet.columns = [
+            { header: 'ผู้ประเมิน', key: 'AssessorUsername', width: 20 },
+            { header: 'ผู้ถูกประเมิน', key: 'AssesseeName', width: 20 },
+            { header: 'แผนก', key: 'Department', width: 15 },
+            { header: 'ตรงต่อเวลา', key: 'Score1', width: 15 },
+            { header: 'การทำงานร่วมกัน', key: 'Score2', width: 20 },
+            { header: 'จำนวนงาน', key: 'Score3', width: 15 },
+            { header: 'คุณภาพงาน', key: 'Score4', width: 15 },
+            { header: 'อื่นๆ', key: 'Score5', width: 10 },
+            { header: 'คะแนนรวม', key: 'TotalScore', width: 15 },
+            { header: 'สัดส่วนคะแนน', key: 'PercentScore', width: 18 }, 
+        ];
+
+        exportData.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'All_Assessments.xlsx';
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
+
+    const ExportToCSV = () => {
+        const csv = Papa.unparse(allAssessments);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'All_Assessments.csv';
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
     return (
         <div className="assessment-container">
             {loading && <div className="loading"><div className="spinner"></div></div>}
             {error && <div className="error-message">{error}</div>}
 
             <div className="logout-container">
-                <button className="back-btn" onClick={() => navigate('/admin/dashboard')}>Back</button>
+                <button className="back-btn" onClick={(e) => navigate('/admin/dashboard')}>Back</button>
                 <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
 
             <h1>รายการประเมินทั้งหมด</h1>
+            <div className="export-btn">
+                <button className="export-excel submit-btn" onClick={(e) => ExportToExcel()}>Export to Excel</button>
+                <button className='export-csv submit-btn' onClick={(e) => ExportToCSV()}>Export to CSV</button>
+            </div>
+
 
             {isModalOpen && (
                 <div className="modal">
